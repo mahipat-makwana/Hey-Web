@@ -93,6 +93,39 @@ function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+
+  useEffect(() => {
+    const testButton = document.getElementById('ai-test-button');
+
+    const handleTestClick = async () => {
+      if (typeof chrome !== 'undefined' && chrome.ai && chrome.ai.translator) {
+        console.log('AI Translator API found. Attempting to translate...');
+        try {
+          const result = await chrome.ai.translator.translate(
+            'Hello, this is a test.',
+            { targetLanguage: 'es' }
+          );
+          console.log('✅ Translation Successful!', result);
+        } catch (error) {
+          console.error('❌ AI Translation Failed:', error);
+        }
+      } else {
+        alert('Built-in AI is not available. Make sure you are using Chrome Canary and have enabled the correct flags in chrome://flags');
+      }
+    };
+
+    if (testButton) {
+      testButton.addEventListener('click', handleTestClick);
+    }
+
+    return () => {
+      if (testButton) {
+        testButton.removeEventListener('click', handleTestClick);
+      }
+    };
+  }, []);
+
+
   // Effect to fetch chat, user, and message data
   useEffect(() => {
     scrollToBottom();
