@@ -46,13 +46,13 @@ function Profile() {
 
     setIsLoading(true);
     const storage = getStorage();
-    const storageRef = storageRef(storage, `profile_images/${user.uid}`);
+    const fileRef = storageRef(storage, `profile_images/${user.uid}`);
 
     try {
       // Upload the file
-      await uploadBytes(storageRef, file);
+      await uploadBytes(fileRef, file);
       // Get the download URL
-      const photoURL = await getDownloadURL(storageRef);
+      const photoURL = await getDownloadURL(fileRef);
 
       // Update profile in Auth and Firestore
       await updateProfile(auth.currentUser, { photoURL });
